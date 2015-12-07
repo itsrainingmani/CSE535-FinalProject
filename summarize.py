@@ -3,6 +3,7 @@ from nltk.corpus import stopwords
 from collections import defaultdict
 from string import punctuation
 from heapq import nlargest
+import ujson
 
 class FrequencySummarizer:
   def __init__(self, min_cut=0.1, max_cut=0.9):
@@ -56,3 +57,14 @@ class FrequencySummarizer:
   def _rank(self, ranking, n):
     """ return the first n sentences with highest ranking """
     return nlargest(n, ranking, key=ranking.get)
+
+fs = FrequencySummarizer()
+
+text = ""
+with open('EnglishFinal.json','rb') as jsondata:
+    tweets = ujson.load(jsondata)
+    for tweet in tweets:
+        text += tweet['text_en']
+
+for s in fs.summarize(text,3):
+    print '*',s
