@@ -59,11 +59,17 @@ class FrequencySummarizer:
     """ return the first n sentences with highest ranking """
     return nlargest(n, ranking, key=ranking.get)
 
+#Function that accepts the text block and creates n summaries from that text
 def freqsum(text,n):
     fs = FrequencySummarizer()
     for s in fs.summarize(text,n):
-        print '*',s
+        print '-->',s
 
+#Function that analyzes the polarity of sentiment of the given text. It returns a tuple where the first element is the percentage of positivity of the text and the second element is the percentage of negativity
 def sentiment(text):
     blob = TextBlob(text)
-    print blob.sentiment
+    polar = float(blob.sentiment.polarity + 1)/2
+    pos = polar*100
+    neg = 100 - pos
+    print pos, neg
+    return (pos,neg)
