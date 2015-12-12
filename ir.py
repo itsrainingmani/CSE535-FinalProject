@@ -4,6 +4,7 @@ from collections import defaultdict
 from string import punctuation
 from heapq import nlargest
 from textblob import TextBlob
+import wikipedia
 import ujson
 
 class FrequencySummarizer:
@@ -59,11 +60,12 @@ class FrequencySummarizer:
     """ return the first n sentences with highest ranking """
     return nlargest(n, ranking, key=ranking.get)
 
-#Function that accepts the text block and creates n summaries from that text
+#Function that accepts the text block and creates n summaries from that text. Returns a list of summaries
 def freqsum(text,n):
     fs = FrequencySummarizer()
+    summary = []
     for s in fs.summarize(text,n):
-        print '-->',s
+        summary.append(s)
 
 #Function that analyzes the polarity of sentiment of the given text. It returns a tuple where the first element is the percentage of positivity of the text and the second element is the percentage of negativity
 def sentiment(text):
@@ -71,5 +73,11 @@ def sentiment(text):
     polar = float(blob.sentiment.polarity + 1)/2
     pos = polar*100
     neg = 100 - pos
-    print pos, neg
+    #print pos, neg
     return (pos,neg)
+
+#Returns a summary from wikipedia. Takes in query term and the language as input
+def wikisummary(query, lang):
+    wikipedia.set_lang(lang)
+    #print wikipedia.summary(query,5)
+    return wikipedia.summary(query,5)
